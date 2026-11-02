@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Meu Blog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background: #f5f5f4;
+            color: #1c1917;
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        header {
+            background: #1c1917;
+            color: #fafaf9;
+            padding: 20px 0;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+        }
+
+        header nav {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        header nav a:not(.btn):hover {
+            color: #ea580c;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #ea580c;
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font: inherit;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #c2410c;
+        }
+
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 0.875rem;
+        }
+
+        .btn-secondary {
+            background: #e7e5e4;
+            color: #1c1917;
+        }
+
+        .btn-secondary:hover {
+            background: #d6d3d1;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+
+        main {
+            padding: 40px 0;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .panel {
+            background: #fff;
+            border: 1px solid #e7e5e4;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e7e5e4;
+        }
+
+        th {
+            font-size: 0.875rem;
+            color: #78716c;
+            font-weight: 600;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        td a:hover {
+            color: #ea580c;
+        }
+
+        td time {
+            font-size: 0.875rem;
+            color: #78716c;
+            white-space: nowrap;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .actions form {
+            display: inline;
+        }
+
+        .empty {
+            text-align: center;
+            color: #78716c;
+            padding: 48px 16px;
+        }
+
+        .empty p {
+            margin-bottom: 16px;
+        }
+
+        footer {
+            text-align: center;
+            color: #78716c;
+            font-size: 0.875rem;
+            padding: 24px 0;
+            border-top: 1px solid #e7e5e4;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('partials/header', { hideNewPost: true }) %>
+
+    <main class="container">
+        <div class="admin-header">
+            <h2>Painel de administração</h2>
+            <a href="/admin/create" class="btn">Novo post</a>
+        </div>
+
+        <div class="panel">
+            <% if (posts.length === 0) { %>
+                <div class="empty">
+                    <p>Nenhum post cadastrado.</p>
+                    <a href="/admin/create" class="btn">Criar o primeiro</a>
+                </div>
+            <% } else { %>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Criado em</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% posts.forEach(post => { %>
+                            <tr>
+                                <td><a href="/posts/<%= post.id %>"><%= post.title %></a></td>
+                                <td>
+                                    <time datetime="<%= post.createdAt.toISOString() %>">
+                                        <%= post.createdAt.toLocaleDateString('pt-BR') %>
+                                    </time>
+                                </td>
+                                <td>
+                                    <div class="actions">
+                                        <a href="/admin/edit/<%= post.id %>" class="btn btn-sm btn-secondary">Editar</a>
+                                        <form action="/admin/delete/<%= post.id %>" method="POST"
+                                            onsubmit="return confirm('Excluir este post?')">
+                                            <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } %>
+        </div>
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+
+</html>

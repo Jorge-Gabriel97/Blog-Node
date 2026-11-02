@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,6 +44,16 @@
 
         header h1 {
             font-size: 1.5rem;
+        }
+
+        header nav {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        header nav a:not(.btn):hover {
+            color: #ea580c;
         }
 
         .btn {
@@ -116,13 +127,9 @@
         }
     </style>
 </head>
+
 <body>
-    <header>
-        <div class="container">
-            <h1><a href="/">Meu Blog</a></h1>
-            <a href="/posts/new" class="btn">Novo post</a>
-        </div>
-    </header>
+    <%- include('partials/header') %>
 
     <main class="container">
         <h2>Últimos posts</h2>
@@ -148,10 +155,7 @@
         <% } %>
     </main>
 
-    <footer>
-        <div class="container">
-            <p>© <%= new Date().getFullYear() %> Meu Blog</p>
-        </div>
-    </footer>
+    <%- include('partials/footer') %>
 </body>
+
 </html>
