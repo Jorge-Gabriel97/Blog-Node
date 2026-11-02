@@ -4,18 +4,19 @@ const router = require('./routes');
 
 const app = express();
 
-//Configuração do EJS
-app.set('view engine', 'ejs')
-app.set('views', path.join(__dirname, 'views'))
+//Configuração para receber JSON no corpo das requisições
+app.use(express.json())
 
-//Configuração de arquivos estáticos
-app.use(express.static('public'))
+//Configuração das rotas da API
+app.use('/api', router)
 
-//Configuração para receber dados do formulário
-app.use(express.urlencoded({ extended: true }))
+//Rota de API inexistente
+app.use('/api', (req, res) => res.status(404).json({ error: 'Rota não encontrada' }))
 
-//Configuração das rotas
-app.use(router)
+//Em produção, serve o front-end React já compilado (client/dist)
+const clientDist = path.join(__dirname, '..', 'client', 'dist')
+app.use(express.static(clientDist))
+app.get('/{*splat}', (req, res) => res.sendFile(path.join(clientDist, 'index.html')))
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
