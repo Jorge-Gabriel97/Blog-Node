@@ -10,6 +10,7 @@ const postsController = {
     show: (req, res) => {
         const id = req.params.id;
         const post = postModel.getPostById(id);
+        if (!post) return res.status(404).send('Post não encontrado');
         res.render('post', { post });
     },
 }
